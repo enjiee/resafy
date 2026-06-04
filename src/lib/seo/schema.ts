@@ -39,7 +39,7 @@ export function websiteSchema() {
 export function bookSchema(book: {
   title: string;
   author: string;
-  slug: string;
+  path: string;
   description?: string;
   coverUrl?: string;
 }) {
@@ -48,9 +48,65 @@ export function bookSchema(book: {
     "@type": "Book",
     name: book.title,
     author: { "@type": "Person", name: book.author },
-    url: `${SITE}/ringkasan-buku/${book.slug}`,
+    url: `${SITE}${book.path}`,
     ...(book.description ? { abstract: book.description } : {}),
     ...(book.coverUrl ? { image: book.coverUrl } : {}),
     inLanguage: "id-ID",
+  };
+}
+
+/** Article schema — the summary IS an article (transformative commentary). */
+export function articleSchema(a: {
+  headline: string;
+  description: string;
+  path: string;
+  authorName?: string;
+  datePublished?: string;
+  dateModified?: string;
+  image?: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: a.headline,
+    description: a.description,
+    url: `${SITE}${a.path}`,
+    inLanguage: "id-ID",
+    author: { "@type": "Organization", name: "Resafy" },
+    publisher: {
+      "@type": "Organization",
+      name: "Resafy",
+      logo: { "@type": "ImageObject", url: `${SITE}/icons/icon-512.png` },
+    },
+    ...(a.datePublished ? { datePublished: a.datePublished } : {}),
+    ...(a.dateModified ? { dateModified: a.dateModified } : {}),
+    ...(a.image ? { image: a.image } : {}),
+  };
+}
+
+/** BreadcrumbList — items: [{name, path}] in order. */
+export function breadcrumbSchema(items: { name: string; path: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((it, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: it.name,
+      item: `${SITE}${it.path}`,
+    })),
+  };
+}
+
+/** FAQPage — drives the on-page FAQ + rich result. */
+export function faqSchema(faqs: { q: string; a: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
   };
 }
