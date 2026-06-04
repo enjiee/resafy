@@ -1,164 +1,199 @@
 import { Button } from "@/components/ui/Button";
-import { Wordmark } from "@/components/brand/BrandMark";
+import { SariWordmark } from "@/components/brand/SariLogos";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
-import { Atmosphere } from "@/components/shared/Atmosphere";
 
-const CHIPS = [
-  { emoji: "💰", label: "Pengen Sukses" },
-  { emoji: "🧠", label: "Biar Gak Stres" },
-  { emoji: "🗣️", label: "Jago Ngomong" },
-  { emoji: "💪", label: "Level Up Diri" },
-  { emoji: "📈", label: "Duit & Investasi" },
+const CATEGORIES = [
+  { n: "01", emoji: "💰", name: "Pengen Sukses" },
+  { n: "02", emoji: "🧠", name: "Biar Gak Stres" },
+  { n: "03", emoji: "🗣️", name: "Jago Ngomong" },
+  { n: "04", emoji: "💪", name: "Level Up Diri" },
+  { n: "05", emoji: "📈", name: "Duit & Investasi" },
+  { n: "06", emoji: "❤️", name: "Hubungan & Cinta" },
 ];
 
 export default function Home() {
   return (
-    <main className="grain relative isolate flex flex-1 flex-col overflow-hidden">
-      <Atmosphere />
-
+    <main className="grain relative">
       {/* Header */}
-      <header className="relative z-10 flex items-center justify-between px-5 pt-6 sm:px-8">
-        <Wordmark className="animate-fade-in text-xl text-ink dark:text-ink-dark" />
-        <div className="animate-fade-in" style={{ animationDelay: "120ms" }}>
+      <header className="mx-auto flex max-w-6xl items-center justify-between px-5 py-6 sm:px-8">
+        <SariWordmark symbol="A" className="animate-fade-in text-xl" />
+        <div className="animate-fade-in" style={{ animationDelay: "100ms" }}>
           <ThemeToggle />
         </div>
       </header>
+      <div className="mx-auto max-w-6xl px-5 sm:px-8">
+        <div className="h-px w-full bg-line dark:bg-line-dark" />
+      </div>
 
-      {/* Hero */}
-      <section className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col justify-center gap-12 px-5 py-10 sm:px-8 lg:flex-row lg:items-center lg:gap-16 lg:py-16">
-        {/* Text column */}
-        <div className="max-w-xl">
-          <span
-            className="animate-fade-up inline-flex w-fit items-center gap-2 rounded-full border border-border-light bg-white/60 px-3 py-1.5 text-xs font-semibold text-ink-muted backdrop-blur-sm dark:border-border-dark dark:bg-white/5 dark:text-ink-dark-muted"
+      {/* HERO — editorial, asymmetric */}
+      <section className="mx-auto grid max-w-6xl gap-10 px-5 pb-20 pt-12 sm:px-8 lg:grid-cols-12 lg:gap-12 lg:pt-20">
+        <div className="lg:col-span-7">
+          <p
+            className="animate-fade-up font-mono text-xs uppercase tracking-[0.18em] text-ink-faint dark:text-cream-muted"
             style={{ animationDelay: "60ms" }}
           >
-            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-            Ringkasan buku · Bahasa Indonesia
-          </span>
+            Ringkasan buku — No. 001
+          </p>
 
           <h1
-            className="animate-fade-up mt-5 font-display text-[2.75rem] font-semibold leading-[1.02] tracking-tight text-ink dark:text-ink-dark sm:text-6xl"
-            style={{ animationDelay: "140ms" }}
+            className="animate-fade-up mt-5 font-display font-semibold leading-[0.98] tracking-[-0.02em]"
+            style={{ fontSize: "clamp(2.85rem, 9vw, 5.75rem)", animationDelay: "120ms" }}
           >
-            Buku tebal,
+            Inti sari buku,
             <br />
-            males baca?
-            <br />
-            <span className="mt-1 inline-block -rotate-1 rounded-xl bg-primary px-3 pb-1.5 pt-0.5 text-deep-navy shadow-primary-sm">
+            dalam{" "}
+            <span className="relative whitespace-nowrap">
               15 menit
-            </span>{" "}
-            kelar.
+              <span
+                aria-hidden
+                className="absolute inset-x-0 -bottom-0.5 h-[0.1em] rounded-full bg-saffron"
+              />
+            </span>
+            .
           </h1>
 
           <p
-            className="animate-fade-up mt-6 max-w-md text-lg leading-relaxed text-ink-muted dark:text-ink-dark-muted"
+            className="animate-fade-up mt-7 max-w-md text-lg text-ink-muted dark:text-cream-muted"
             style={{ animationDelay: "220ms" }}
           >
-            Serap inti sari buku bestseller lewat teks, audio, & kartu. Gratis,
-            tanpa daftar.
+            Serap ilmu dari buku bestseller lewat ringkasan, audio, & kartu.
+            Gratis, Bahasa Indonesia.
           </p>
 
           <div
             className="animate-fade-up mt-8 flex flex-col gap-3 sm:flex-row sm:items-center"
             style={{ animationDelay: "300ms" }}
           >
-            <Button size="lg" className="shadow-primary">
-              MULAI BACA GRATIS
-            </Button>
-            <Button variant="ghost" size="lg">
-              Lihat caranya
+            <Button size="lg">Mulai baca</Button>
+            <Button variant="outline" size="lg">
+              Lihat contoh
             </Button>
           </div>
 
           <p
-            className="animate-fade-up mt-4 text-sm text-ink-muted dark:text-ink-dark-muted"
-            style={{ animationDelay: "360ms" }}
+            className="animate-fade-up mt-6 font-mono text-xs uppercase tracking-[0.14em] text-ink-faint dark:text-cream-muted"
+            style={{ animationDelay: "380ms" }}
           >
-            Gratis selamanya · Tanpa kartu kredit · 100% Bahasa Indonesia
+            Gratis · Tanpa daftar · 100% Bahasa Indonesia
           </p>
+        </div>
 
-          {/* Category chips */}
-          <div
-            className="animate-fade-up -mx-5 mt-10 flex gap-2.5 overflow-x-auto px-5 pb-2 sm:mx-0 sm:flex-wrap sm:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-            style={{ animationDelay: "440ms" }}
-          >
-            {CHIPS.map((c) => (
-              <span
-                key={c.label}
-                className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border-light bg-white/70 px-3.5 py-2 text-sm font-semibold text-ink backdrop-blur-sm transition-all duration-150 ease-out-soft hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md dark:border-border-dark dark:bg-white/5 dark:text-ink-dark"
-              >
-                <span aria-hidden>{c.emoji}</span>
-                {c.label}
-              </span>
+        {/* Offset editorial module — featured summary */}
+        <div
+          className="animate-rise lg:col-span-5 lg:pt-8"
+          style={{ animationDelay: "440ms" }}
+        >
+          <FeaturedBook />
+        </div>
+      </section>
+
+      {/* INK BAND — signature value prop (saffron text works on ink) */}
+      <section className="bg-ink text-cream dark:bg-indigo">
+        <div className="mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-24">
+          <p className="font-mono text-xs uppercase tracking-[0.18em] text-saffron">
+            Kenapa Resafy
+          </p>
+          <p className="mt-5 max-w-3xl font-display text-3xl font-medium leading-[1.15] tracking-[-0.01em] sm:text-5xl">
+            Buku tebal kami suling jadi{" "}
+            <span className="text-saffron">sari</span>—inti yang bisa kamu serap
+            sekali rebahan, tanpa kehilangan esensinya.
+          </p>
+          <div className="mt-12 grid gap-px overflow-hidden rounded-xl border border-line-dark bg-line-dark sm:grid-cols-3">
+            {[
+              { k: "Teks", v: "Swipe-card ringkas, ala feed." },
+              { k: "Audio", v: "Dengerin sambil rebahan." },
+              { k: "Kartu", v: "Inti sari buat di-share." },
+            ].map((f) => (
+              <div key={f.k} className="bg-ink p-6 dark:bg-indigo">
+                <h3 className="font-display text-xl font-semibold">{f.k}</h3>
+                <p className="mt-1 text-sm text-cream-muted">{f.v}</p>
+              </div>
             ))}
           </div>
         </div>
-
-        {/* Preview card — tactile product peek (editorial, breaks the grid) */}
-        <div
-          className="animate-scale-in lg:flex-1"
-          style={{ animationDelay: "520ms" }}
-        >
-          <PreviewCard />
-        </div>
       </section>
+
+      {/* CATEGORY INDEX — editorial TOC */}
+      <section className="mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-24">
+        <div className="flex items-baseline justify-between">
+          <h2 className="font-display text-2xl font-semibold sm:text-3xl">
+            Mau jago apa?
+          </h2>
+          <span className="font-mono text-xs uppercase tracking-[0.14em] text-ink-faint dark:text-cream-muted">
+            Jelajah
+          </span>
+        </div>
+        <ul className="mt-6">
+          {CATEGORIES.map((c) => (
+            <li key={c.n}>
+              <a
+                href="#"
+                className="group flex items-center gap-5 border-t border-line py-5 transition-colors hover:bg-ink/[0.02] dark:border-line-dark dark:hover:bg-cream/[0.03]"
+              >
+                <span className="font-mono text-sm text-ink-faint dark:text-cream-muted">
+                  {c.n}
+                </span>
+                <span className="text-2xl">{c.emoji}</span>
+                <span className="font-display text-xl font-medium sm:text-2xl">
+                  {c.name}
+                </span>
+                <span className="ml-auto font-mono text-lg text-ink-faint transition-transform duration-[var(--duration-base)] ease-spring group-hover:translate-x-1 dark:text-cream-muted">
+                  →
+                </span>
+              </a>
+            </li>
+          ))}
+          <li className="border-t border-line dark:border-line-dark" />
+        </ul>
+      </section>
+
+      {/* Footer */}
+      <footer className="mx-auto max-w-6xl px-5 pb-12 sm:px-8">
+        <div className="flex flex-col gap-4 border-t border-line pt-8 sm:flex-row sm:items-center sm:justify-between dark:border-line-dark">
+          <SariWordmark symbol="A" className="text-lg" />
+          <p className="font-mono text-xs uppercase tracking-[0.14em] text-ink-faint dark:text-cream-muted">
+            Serap ilmunya, skip tebelnya
+          </p>
+        </div>
+      </footer>
     </main>
   );
 }
 
-/** A tactile peek at a book summary — layered stack, straightens on hover. */
-function PreviewCard() {
+/** Featured summary — editorial, flat, confident (no rotation/glass). */
+function FeaturedBook() {
   return (
-    <div className="group relative mx-auto w-full max-w-sm">
-      {/* stacked summaries peeking behind — depth + "banyak buku" cue */}
-      <div
-        aria-hidden
-        className="absolute inset-x-0 top-3 mx-auto h-[90%] w-[92%] -rotate-[5deg] rounded-2xl border border-border-light bg-white/40 backdrop-blur-sm transition-transform duration-[var(--duration-slow)] ease-out-soft group-hover:-rotate-[9deg] dark:border-border-dark dark:bg-dark-surface/40"
-      />
-      <div
-        aria-hidden
-        className="absolute inset-x-0 top-1.5 mx-auto h-[95%] w-[96%] rotate-[6deg] rounded-2xl border border-border-light bg-white/55 backdrop-blur-sm transition-transform duration-[var(--duration-slow)] ease-out-soft group-hover:rotate-[10deg] dark:border-border-dark dark:bg-dark-surface/55"
-      />
-      <div className="relative rotate-2 rounded-2xl border border-border-light bg-white/85 p-5 shadow-xl backdrop-blur-md transition-all duration-[var(--duration-slow)] ease-out-soft group-hover:rotate-0 group-hover:shadow-2xl dark:border-border-dark dark:bg-dark-surface/85">
-        <div className="flex gap-4">
-          <div className="flex h-24 w-16 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-accent-gold text-3xl shadow-md">
-            💰
-          </div>
-          <div className="min-w-0 flex-1">
-            <span className="inline-block rounded-md bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary-text dark:bg-primary/15 dark:text-primary">
-              Pengen Sukses
-            </span>
-            <h3 className="mt-1.5 font-display text-lg font-semibold leading-tight text-ink dark:text-ink-dark">
-              Atomic Habits
-            </h3>
-            <p className="text-sm text-ink-muted dark:text-ink-dark-muted">
-              James Clear
-            </p>
-          </div>
-        </div>
+    <article className="rounded-xl border border-line bg-paper-2/50 p-6 dark:border-line-dark dark:bg-indigo">
+      <div className="flex items-center justify-between">
+        <span className="rounded-full bg-saffron-soft px-3 py-1 text-sm font-semibold text-ink dark:bg-saffron/20 dark:text-saffron">
+          Pengen Sukses
+        </span>
+        <span className="font-mono text-xs uppercase tracking-wider text-ink-faint dark:text-cream-muted">
+          Pilihan
+        </span>
+      </div>
 
-        {/* audio progress hint */}
-        <div className="mt-4 flex items-center gap-3 rounded-xl bg-ink/[0.04] px-3 py-2.5 dark:bg-white/5">
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-white">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M8 5v14l11-7z" />
-            </svg>
-          </span>
-          <div className="flex-1">
-            <div className="h-1.5 w-full overflow-hidden rounded-full bg-ink/10 dark:bg-white/10">
-              <div className="h-full w-2/5 rounded-full bg-primary" />
-            </div>
-          </div>
-          <span className="text-xs font-medium text-ink-muted dark:text-ink-dark-muted">
-            6:12
-          </span>
+      <div className="mt-5 flex gap-4">
+        <div className="flex h-28 w-20 shrink-0 items-center justify-center rounded-md bg-ink text-3xl text-cream dark:bg-indigo-deep">
+          💰
         </div>
-
-        <div className="mt-3 flex items-center justify-between text-xs text-ink-muted dark:text-ink-dark-muted">
-          <span>12 kartu · 15 menit</span>
-          <span className="font-semibold text-accent-mint">●●●○○</span>
+        <div className="min-w-0">
+          <h3 className="font-display text-2xl font-semibold leading-tight">
+            Atomic Habits
+          </h3>
+          <p className="text-sm text-ink-muted dark:text-cream-muted">
+            James Clear
+          </p>
+          <p className="mt-3 font-mono text-xs uppercase tracking-wider text-ink-faint dark:text-cream-muted">
+            12 kartu · 15 menit
+          </p>
         </div>
       </div>
-    </div>
+
+      <blockquote className="mt-5 border-l-2 border-saffron pl-4 font-display text-lg italic leading-snug">
+        &ldquo;Kamu nggak naik level ke target. Kamu turun ke level
+        kebiasaanmu.&rdquo;
+      </blockquote>
+    </article>
   );
 }
