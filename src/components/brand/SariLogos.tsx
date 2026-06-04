@@ -78,7 +78,7 @@ const symbols: Record<Sym, (p: { className?: string }) => React.ReactElement> = 
 
 /** Full lockup: symbol + "resafy" (Fraunces) + saffron sari-drop full stop. */
 export function SariWordmark({
-  symbol = "A",
+  symbol = "B",
   className,
 }: {
   symbol?: Sym;

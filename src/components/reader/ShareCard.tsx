@@ -36,7 +36,7 @@ export function ShareCard({
     >
       {/* Top — brand + section label */}
       <div className="relative z-10 flex items-center justify-between">
-        <SariWordmark symbol="A" className="text-base" />
+        <SariWordmark symbol="B" className="text-base" />
         <span
           className={cn(
             "font-mono text-[10px] uppercase tracking-[0.18em]",

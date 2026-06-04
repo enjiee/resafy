@@ -16,7 +16,7 @@ export default function Home() {
     <main className="grain relative">
       {/* Header */}
       <header className="mx-auto flex max-w-6xl items-center justify-between px-5 py-6 sm:px-8">
-        <SariWordmark symbol="A" className="animate-fade-in text-xl" />
+        <SariWordmark symbol="B" className="animate-fade-in text-xl" />
         <div className="animate-fade-in" style={{ animationDelay: "100ms" }}>
           <ThemeToggle />
         </div>
@@ -150,7 +150,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="mx-auto max-w-6xl px-5 pb-12 sm:px-8">
         <div className="flex flex-col gap-4 border-t border-line pt-8 sm:flex-row sm:items-center sm:justify-between dark:border-line-dark">
-          <SariWordmark symbol="A" className="text-lg" />
+          <SariWordmark symbol="B" className="text-lg" />
           <p className="font-mono text-xs uppercase tracking-[0.14em] text-ink-faint dark:text-cream-muted">
             Serap ilmunya, skip tebelnya
           </p>
