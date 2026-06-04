@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+@theme inline {
+  /* === RESAFY DESIGN TOKENS === */
+
+  /* Typography */
+  --font-sans: var(--font-plus-jakarta), "Plus Jakarta Sans", system-ui, sans-serif;
+
+  /* Brand Colors */
+  --color-primary: #FF6B35;
+  --color-primary-hover: #E85A25;
+  --color-primary-light: #FFF0E8;
+
+  /* Backgrounds */
+  --color-warm-white: #FFF8F0;
+  --color-deep-navy: #1A1A2E;
+  --color-dark-surface: #16213E;
+
+  /* Accents */
+  --color-accent-mint: #00D4AA;
+  --color-accent-gold: #FFB800;
+  --color-accent-coral: #FF4757;
+
+  /* Text */
+  --color-text-primary: #2D3436;
+  --color-text-muted: #636E72;
+  --color-text-dark-primary: #E8E8E8;
+  --color-text-dark-muted: #9BA4A9;
+}
+
+/* Base styles */
+body {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Selection color */
+::selection {
+  background-color: #FF6B35;
+  color: white;
+}
