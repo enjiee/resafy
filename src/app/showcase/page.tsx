@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { BrandMark, Wordmark } from "@/components/brand/BrandMark";
 
 export default function ShowcasePage() {
   return (
@@ -18,6 +19,25 @@ export default function ShowcasePage() {
         </div>
         <ThemeToggle />
       </div>
+
+      {/* Brand */}
+      <Section title="Brand Mark">
+        <Card>
+          <div className="flex items-end gap-6">
+            <BrandMark className="h-6 w-6 text-ink dark:text-ink-dark" />
+            <BrandMark className="h-12 w-12 text-ink dark:text-ink-dark" />
+            <BrandMark className="h-20 w-20 text-ink dark:text-ink-dark" />
+          </div>
+          <div className="mt-6 flex flex-wrap items-center gap-x-8 gap-y-4">
+            <Wordmark className="text-2xl text-ink dark:text-ink-dark" />
+            <Wordmark className="text-3xl text-primary" />
+          </div>
+          <p className="mt-4 text-sm text-ink-muted dark:text-ink-dark-muted">
+            Distilasi: baris teks nyiut jadi satu titik esensi 🔸 (dot = Sunset
+            Orange).
+          </p>
+        </Card>
+      </Section>
 
       {/* Buttons */}
       <Section title="Buttons — Variants">
