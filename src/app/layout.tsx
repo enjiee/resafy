@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans, Fraunces } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider, themeInitScript } from "@/components/ui/ThemeProvider";
 import { organizationSchema, websiteSchema } from "@/lib/seo/schema";
+import { ServiceWorkerRegister } from "@/components/shared/ServiceWorkerRegister";
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -82,6 +83,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col font-sans">
         <ThemeProvider>{children}</ThemeProvider>
+        <ServiceWorkerRegister />
       </body>
     </html>
   );
