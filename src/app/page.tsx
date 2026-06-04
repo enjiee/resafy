@@ -1,24 +1,31 @@
+import Link from "next/link";
+import { Button } from "@/components/ui/Button";
+
 export default function Home() {
   return (
     <div className="flex flex-1 flex-col items-center justify-center px-6 text-center">
-      <div className="text-6xl mb-6">📚</div>
-      <h1 className="text-3xl font-extrabold tracking-tight text-text-primary dark:text-text-dark-primary sm:text-5xl">
-        Resafy
+      <div className="mb-6 text-6xl">📚</div>
+      <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
+        Buku tebal? Males baca?
       </h1>
-      <p className="mt-3 text-lg text-text-muted dark:text-text-dark-muted max-w-md">
-        Serap ilmunya, skip tebelnya.
+      <p className="mt-3 max-w-md text-lg text-ink-muted dark:text-ink-dark-muted">
+        15 menit, kelar. Serap inti sari buku bestseller — gratis, Bahasa
+        Indonesia.
       </p>
-      <div className="mt-8 flex flex-col gap-3 w-full max-w-xs">
-        <div className="rounded-2xl bg-primary px-6 py-4 text-white font-bold text-lg shadow-lg shadow-primary/25 text-center">
+      <div className="mt-8 flex w-full max-w-xs flex-col gap-3">
+        <Button size="lg" fullWidth>
           MULAI BACA GRATIS
-        </div>
-        <p className="text-sm text-text-muted dark:text-text-dark-muted">
+        </Button>
+        <p className="text-sm text-ink-muted dark:text-ink-dark-muted">
           15 menit &middot; Bahasa Indonesia &middot; Gratis
         </p>
       </div>
-      <div className="mt-12 text-xs text-text-muted dark:text-text-dark-muted">
-        Phase 0 — Foundation ✅
-      </div>
+      <Link
+        href="/showcase"
+        className="mt-12 text-xs text-ink-muted underline-offset-4 hover:underline dark:text-ink-dark-muted"
+      >
+        Phase 0 — Design System →
+      </Link>
     </div>
   );
 }
