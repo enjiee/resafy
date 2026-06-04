@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider, themeInitScript } from "@/components/ui/ThemeProvider";
 import { organizationSchema, websiteSchema } from "@/lib/seo/schema";
 import { ServiceWorkerRegister } from "@/components/shared/ServiceWorkerRegister";
+import { Analytics } from "@vercel/analytics/next";
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -84,6 +85,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col font-sans">
         <ThemeProvider>{children}</ThemeProvider>
         <ServiceWorkerRegister />
+        <Analytics />
       </body>
     </html>
   );
