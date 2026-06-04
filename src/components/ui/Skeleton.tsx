@@ -5,8 +5,8 @@ type SkeletonProps = React.HTMLAttributes<HTMLDivElement> & {
 };
 
 /**
- * Shimmer loading placeholder. NEVER use a spinner — always skeleton.
- * Set size via className, e.g. <Skeleton className="h-4 w-32" />
+ * Shimmer loading placeholder. NEVER a spinner.
+ * Size via className, e.g. <Skeleton className="h-4 w-32" />
  */
 export function Skeleton({ className, ref, ...props }: SkeletonProps) {
   return (
@@ -15,8 +15,8 @@ export function Skeleton({ className, ref, ...props }: SkeletonProps) {
       aria-hidden="true"
       className={cn(
         "rounded-md bg-[length:200%_100%] animate-shimmer",
-        "bg-gradient-to-r from-ink/[0.06] via-ink/[0.13] to-ink/[0.06]",
-        "dark:from-white/[0.05] dark:via-white/[0.12] dark:to-white/[0.05]",
+        "bg-gradient-to-r from-ink/[0.05] via-ink/[0.11] to-ink/[0.05]",
+        "dark:from-cream/[0.05] dark:via-cream/[0.11] dark:to-cream/[0.05]",
         className,
       )}
       {...props}

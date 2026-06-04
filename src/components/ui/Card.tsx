@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils/cn";
 type CardPadding = "none" | "sm" | "md" | "lg";
 
 type CardProps = React.HTMLAttributes<HTMLDivElement> & {
-  /** Adds hover-lift + press feedback for clickable cards (book cards) */
+  /** Hover-lift + spring feedback for clickable cards */
   interactive?: boolean;
   padding?: CardPadding;
   ref?: React.Ref<HTMLDivElement>;
@@ -11,22 +11,22 @@ type CardProps = React.HTMLAttributes<HTMLDivElement> & {
 
 const paddings: Record<CardPadding, string> = {
   none: "",
-  sm: "p-3",
+  sm: "p-4",
   md: "p-5",
   lg: "p-7",
 };
 
+// Flat, confident surface + editorial hairline (no heavy shadow / glass)
 const base =
-  "rounded-xl bg-white dark:bg-dark-surface " +
-  "border border-border-light dark:border-border-dark " +
-  "shadow-sm";
+  "rounded-lg bg-paper-2/60 dark:bg-indigo " +
+  "border border-line dark:border-line-dark";
 
 const interactiveStyles =
-  "cursor-pointer transition-all duration-200 ease-out-soft " +
-  "hover:-translate-y-0.5 hover:shadow-lg " +
+  "cursor-pointer transition-[transform,border-color] duration-[var(--duration-base)] ease-spring " +
+  "hover:-translate-y-1 hover:border-ink/30 dark:hover:border-cream/30 " +
   "active:translate-y-0 active:scale-[0.99] " +
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary " +
-  "focus-visible:ring-offset-2 focus-visible:ring-offset-warm-white dark:focus-visible:ring-offset-deep-navy";
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saffron " +
+  "focus-visible:ring-offset-2 focus-visible:ring-offset-paper dark:focus-visible:ring-offset-indigo-deep";
 
 export function Card({
   interactive = false,
