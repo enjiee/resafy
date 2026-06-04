@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Plus_Jakarta_Sans, Fraunces } from "next/font/google";
+import { Plus_Jakarta_Sans, Fraunces, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider, themeInitScript } from "@/components/ui/ThemeProvider";
 import { organizationSchema, websiteSchema } from "@/lib/seo/schema";
@@ -20,7 +20,15 @@ const fraunces = Fraunces({
   subsets: ["latin"],
   variable: "--font-fraunces",
   display: "swap",
-  axes: ["opsz", "SOFT"],
+  axes: ["opsz", "SOFT", "WONK"],
+});
+
+// Mono accent — metadata/labels only, used sparingly.
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains-mono",
+  display: "swap",
+  weight: ["500", "600"],
 });
 
 export const metadata: Metadata = {
@@ -57,8 +65,8 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#FF6B35" },
-    { media: "(prefers-color-scheme: dark)", color: "#1A1A2E" },
+    { media: "(prefers-color-scheme: light)", color: "#F7F3EC" },
+    { media: "(prefers-color-scheme: dark)", color: "#141E36" },
   ],
 };
 
@@ -71,7 +79,7 @@ export default function RootLayout({
     <html
       lang="id"
       suppressHydrationWarning
-      className={`${plusJakarta.variable} ${fraunces.variable} h-full antialiased`}
+      className={`${plusJakarta.variable} ${fraunces.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
