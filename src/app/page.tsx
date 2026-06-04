@@ -1,6 +1,4 @@
 import Link from "next/link";
-import { SariWordmark } from "@/components/brand/SariLogos";
-import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { BookCover } from "@/components/shared/BookCover";
 import { BookCardLink } from "@/components/shared/BookCardLink";
 import {
@@ -29,17 +27,6 @@ export default async function Home() {
 
   return (
     <main className="grain relative">
-      {/* Header */}
-      <header className="mx-auto flex max-w-6xl items-center justify-between px-5 py-6 sm:px-8">
-        <SariWordmark symbol="B" className="animate-fade-in text-xl" />
-        <div className="animate-fade-in" style={{ animationDelay: "100ms" }}>
-          <ThemeToggle />
-        </div>
-      </header>
-      <div className="mx-auto max-w-6xl px-5 sm:px-8">
-        <div className="h-px w-full bg-line dark:bg-line-dark" />
-      </div>
-
       {/* HERO */}
       <section className="mx-auto grid max-w-6xl gap-10 px-5 pb-20 pt-12 sm:px-8 lg:grid-cols-12 lg:gap-12 lg:pt-20">
         <div className="lg:col-span-7">
@@ -52,7 +39,7 @@ export default async function Home() {
 
           <h1
             className="animate-fade-up mt-5 font-display font-semibold leading-[0.98] tracking-[-0.02em]"
-            style={{ fontSize: "clamp(2.85rem, 9vw, 5.75rem)", animationDelay: "120ms" }}
+            style={{ fontSize: "clamp(2.45rem, 8.4vw, 5.5rem)", animationDelay: "120ms" }}
           >
             Inti sari buku,
             <br />
@@ -79,19 +66,17 @@ export default async function Home() {
             className="animate-fade-up mt-8 flex flex-col gap-3 sm:flex-row sm:items-center"
             style={{ animationDelay: "300ms" }}
           >
-            {featured && (
-              <Link
-                href={readerPath(featured)}
-                className="ease-spring inline-flex h-14 items-center justify-center rounded-lg bg-saffron px-8 font-semibold text-ink transition-transform hover:bg-saffron-deep active:scale-[0.97]"
-              >
-                Mulai baca
-              </Link>
-            )}
             <Link
               href="#perpustakaan"
+              className="ease-spring inline-flex h-14 items-center justify-center rounded-lg bg-saffron px-8 font-semibold text-ink transition-transform hover:bg-saffron-deep active:scale-[0.97]"
+            >
+              Mulai baca
+            </Link>
+            <Link
+              href="/cari"
               className="ease-spring inline-flex h-14 items-center justify-center rounded-lg border border-ink/25 px-8 font-semibold text-ink transition-colors hover:border-ink/50 dark:border-cream/25 dark:text-cream dark:hover:border-cream/50"
             >
-              Jelajah perpustakaan
+              Cari buku
             </Link>
           </div>
 
@@ -192,15 +177,6 @@ export default async function Home() {
         </section>
       )}
 
-      {/* Footer */}
-      <footer className="mx-auto max-w-6xl px-5 pb-12 sm:px-8">
-        <div className="flex flex-col gap-4 border-t border-line pt-8 sm:flex-row sm:items-center sm:justify-between dark:border-line-dark">
-          <SariWordmark symbol="B" className="text-lg" />
-          <p className="font-mono text-xs uppercase tracking-[0.14em] text-ink-faint dark:text-cream-muted">
-            Serap ilmunya, skip tebelnya
-          </p>
-        </div>
-      </footer>
     </main>
   );
 }
@@ -233,7 +209,7 @@ function FeaturedBook({ book }: { book: BookCard }) {
           priority
         />
         <div className="min-w-0">
-          <h3 className="font-display text-2xl font-semibold leading-tight">
+          <h3 className="font-display text-xl font-semibold leading-tight">
             {book.h1 ?? book.title}
           </h3>
           <p className="text-sm text-ink-muted dark:text-cream-muted">

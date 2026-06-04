@@ -1,6 +1,4 @@
 import Link from "next/link";
-import { SariWordmark } from "@/components/brand/SariLogos";
-import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { SwipeCards } from "@/components/reader/SwipeCards";
 import { SaveToWhatsApp } from "@/components/reader/SaveToWhatsApp";
 import { ShareCard } from "@/components/reader/ShareCard";
@@ -68,17 +66,6 @@ export function ReaderView({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-
-      {/* Header */}
-      <header className="mx-auto flex max-w-3xl items-center justify-between px-5 py-6 sm:px-6">
-        <Link href="/" aria-label="Resafy beranda">
-          <SariWordmark className="text-lg" />
-        </Link>
-        <ThemeToggle />
-      </header>
-      <div className="mx-auto max-w-3xl px-5 sm:px-6">
-        <div className="h-px w-full bg-line dark:bg-line-dark" />
-      </div>
 
       <article className="mx-auto max-w-3xl px-5 pb-20 pt-8 sm:px-6">
         {/* Breadcrumb */}
@@ -248,17 +235,6 @@ export function ReaderView({
         )}
       </article>
 
-      {/* Footer */}
-      <footer className="mx-auto max-w-3xl px-5 pb-12 sm:px-6">
-        <div className="flex flex-col gap-3 border-t border-line pt-8 dark:border-line-dark">
-          <Link href="/">
-            <SariWordmark className="text-base" />
-          </Link>
-          <p className="font-mono text-xs uppercase tracking-[0.12em] text-ink-faint dark:text-cream-muted">
-            Serap ilmunya, skip tebelnya · resafy.id
-          </p>
-        </div>
-      </footer>
     </main>
   );
 }

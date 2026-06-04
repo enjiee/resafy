@@ -6,8 +6,6 @@ import {
   getActiveCategorySlugs,
 } from "@/lib/supabase/queries/books";
 import { BookCardLink } from "@/components/shared/BookCardLink";
-import { SariWordmark } from "@/components/brand/SariLogos";
-import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { breadcrumbSchema } from "@/lib/seo/schema";
 
 export const revalidate = 3600;
@@ -52,16 +50,6 @@ export default async function Page({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <header className="mx-auto flex max-w-6xl items-center justify-between px-5 py-6 sm:px-8">
-        <Link href="/" aria-label="Resafy beranda">
-          <SariWordmark symbol="B" className="text-lg" />
-        </Link>
-        <ThemeToggle />
-      </header>
-      <div className="mx-auto max-w-6xl px-5 sm:px-8">
-        <div className="h-px w-full bg-line dark:bg-line-dark" />
-      </div>
-
       <section className="mx-auto max-w-6xl px-5 pb-16 pt-10 sm:px-8">
         <nav className="font-mono text-xs uppercase tracking-[0.12em] text-ink-faint dark:text-cream-muted">
           <Link href="/" className="hover:text-saffron">
@@ -96,16 +84,6 @@ export default async function Page({ params }: Props) {
         )}
       </section>
 
-      <footer className="mx-auto max-w-6xl px-5 pb-12 sm:px-8">
-        <div className="flex flex-col gap-3 border-t border-line pt-8 dark:border-line-dark">
-          <Link href="/">
-            <SariWordmark symbol="B" className="text-base" />
-          </Link>
-          <p className="font-mono text-xs uppercase tracking-[0.12em] text-ink-faint dark:text-cream-muted">
-            Serap ilmunya, skip tebelnya · resafy.id
-          </p>
-        </div>
-      </footer>
     </main>
   );
 }

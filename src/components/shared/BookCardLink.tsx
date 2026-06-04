@@ -21,10 +21,10 @@ export function BookCardLink({
         className="w-full transition-transform duration-[var(--duration-base)] ease-spring group-hover:-translate-y-1"
         sizes="(max-width: 640px) 45vw, (max-width: 1024px) 30vw, 220px"
       />
-      <h3 className="mt-3 line-clamp-2 font-display text-base font-semibold leading-snug transition-colors group-hover:text-saffron">
+      <h3 className="mt-3 line-clamp-3 min-h-[3.6rem] font-display text-[0.95rem] font-semibold leading-snug transition-colors group-hover:text-saffron">
         {title}
       </h3>
-      <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.1em] text-ink-faint dark:text-cream-muted">
+      <p className="mt-1.5 font-mono text-[11px] uppercase tracking-[0.1em] text-ink-faint dark:text-cream-muted">
         {book.page_type === "howto_led" ? "Cara" : "Ringkasan"} ·{" "}
         {book.reading_minutes} menit
       </p>
