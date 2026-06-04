@@ -86,10 +86,14 @@ async function googleBooksCover(title, author) {
 
 async function main() {
   await ensureBucket();
-  const { data: books, error } = await sb
-    .from("books").select("id, slug, title, author, cover_url")
-    .eq("is_published", true).order("slug");
+  // Only fetch books still missing a cover (idempotent, lighter on the API).
+  // Pass --all to re-fetch everything.
+  const onlyMissing = !process.argv.includes("--all");
+  let q = sb.from("books").select("id, slug, title, author, cover_url").eq("is_published", true);
+  if (onlyMissing) q = q.is("cover_url", null);
+  const { data: books, error } = await q.order("slug");
   if (error) throw error;
+  if (!books.length) { console.log("• all books already have covers"); return; }
 
   const results = [];
   for (const b of books) {
