@@ -13,7 +13,7 @@ export function ThemeToggle({ className }: { className?: string }) {
       onClick={toggle}
       aria-label={isDark ? "Ganti ke mode terang" : "Ganti ke mode gelap"}
       className={cn(
-        "inline-flex h-11 w-11 items-center justify-center rounded-full",
+        "inline-flex h-12 w-12 items-center justify-center rounded-full",
         "bg-ink/[0.06] text-ink hover:bg-ink/[0.1]",
         "dark:bg-white/10 dark:text-ink-dark dark:hover:bg-white/[0.15]",
         "transition-all duration-150 ease-out-soft active:scale-90",
