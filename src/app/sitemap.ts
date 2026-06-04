@@ -24,9 +24,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     );
     const { data: books } = await supabase
       .from("books")
-      .select("slug, updated_at, page_type")
+      .select("slug, updated_at, page_type, categories(slug)")
       .eq("is_published", true);
 
+    const catSlugs = new Set<string>();
     for (const b of books ?? []) {
       const prefix = b.page_type === "howto_led" ? "/cara" : "/ringkasan-buku";
       routes.push({
@@ -34,6 +35,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: b.updated_at ? new Date(b.updated_at) : new Date(),
         changeFrequency: "weekly",
         priority: 0.8,
+      });
+      const cat = Array.isArray(b.categories) ? b.categories[0] : b.categories;
+      if (cat?.slug) catSlugs.add(cat.slug as string);
+    }
+
+    // Category browse pages.
+    for (const slug of catSlugs) {
+      routes.push({
+        url: `${SITE}/kategori/${slug}`,
+        lastModified: new Date(),
+        changeFrequency: "weekly",
+        priority: 0.6,
       });
     }
   } catch {
