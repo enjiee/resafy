@@ -29,7 +29,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     const catSlugs = new Set<string>();
     for (const b of books ?? []) {
-      const prefix = b.page_type === "howto_led" ? "/cara" : "/ringkasan-buku";
+      const prefix =
+        b.page_type === "howto_led"
+          ? "/cara"
+          : b.page_type === "list_led"
+            ? "/rekomendasi"
+            : "/ringkasan-buku";
       routes.push({
         url: `${SITE}${prefix}/${b.slug}`,
         lastModified: b.updated_at ? new Date(b.updated_at) : new Date(),

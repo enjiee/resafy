@@ -13,7 +13,7 @@ function anon() {
   );
 }
 
-export type PageType = "book_led" | "howto_led";
+export type PageType = "book_led" | "howto_led" | "list_led";
 
 export type SummaryCard = {
   order_index: number;
@@ -21,6 +21,7 @@ export type SummaryCard = {
   example: string;
   action: string;
   emoji: string | null;
+  href?: string | null;
 };
 
 export type Faq = { q: string; a: string };
@@ -84,7 +85,7 @@ export async function getBookBySlug(
   const [{ data: cards }, { data: takeaways }] = await Promise.all([
     supabase
       .from("summary_cards")
-      .select("order_index, concept, example, action, emoji")
+      .select("order_index, concept, example, action, emoji, href")
       .eq("book_id", book.id)
       .order("order_index"),
     supabase
@@ -127,9 +128,9 @@ export type BookCard = {
 
 /** Route for a book by its mold. */
 export function readerPath(b: { slug: string; page_type: PageType }): string {
-  return b.page_type === "howto_led"
-    ? `/cara/${b.slug}`
-    : `/ringkasan-buku/${b.slug}`;
+  if (b.page_type === "howto_led") return `/cara/${b.slug}`;
+  if (b.page_type === "list_led") return `/rekomendasi/${b.slug}`;
+  return `/ringkasan-buku/${b.slug}`;
 }
 
 const CARD_SELECT =

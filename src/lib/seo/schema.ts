@@ -98,6 +98,24 @@ export function breadcrumbSchema(items: { name: string; path: string }[]) {
   };
 }
 
+/** ItemList — for curated "best books about X" listicle pages (list_led). */
+export function itemListSchema(
+  name: string,
+  items: { name: string; path?: string }[],
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name,
+    itemListElement: items.map((it, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: it.name,
+      ...(it.path ? { url: `${SITE}${it.path}` } : {}),
+    })),
+  };
+}
+
 /** FAQPage — drives the on-page FAQ + rich result. */
 export function faqSchema(faqs: { q: string; a: string }[]) {
   return {
