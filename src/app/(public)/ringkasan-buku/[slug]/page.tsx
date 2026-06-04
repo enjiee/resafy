@@ -1,6 +1,10 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { getBookBySlug, getPublishedSlugs } from "@/lib/supabase/queries/books";
+import {
+  getBookBySlug,
+  getPublishedSlugs,
+  getRelatedBooks,
+} from "@/lib/supabase/queries/books";
 import { ReaderView } from "@/components/reader/ReaderView";
 
 export const revalidate = 3600; // ISR — static, CDN-served, refreshed hourly
@@ -34,5 +38,12 @@ export default async function Page({ params }: Props) {
   const { slug } = await params;
   const book = await getBookBySlug(slug, "book_led");
   if (!book) notFound();
-  return <ReaderView book={book} path={`/ringkasan-buku/${slug}`} />;
+  const related = await getRelatedBooks(book.category?.slug ?? null, slug, 4);
+  return (
+    <ReaderView
+      book={book}
+      path={`/ringkasan-buku/${slug}`}
+      related={related}
+    />
+  );
 }

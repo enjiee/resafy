@@ -106,3 +106,110 @@ export async function getBookBySlug(
     takeaways: ((takeaways as { text: string }[]) ?? []).map((t) => t.text),
   };
 }
+
+/* ============================================================
+ * Browse / library — lightweight card lists (grids, homepage, related)
+ * ============================================================ */
+
+export type CategoryLite = { name: string; slug: string; emoji: string };
+
+export type BookCard = {
+  slug: string;
+  title: string;
+  author: string;
+  h1: string | null;
+  page_type: PageType;
+  cover_url: string | null;
+  reading_minutes: number;
+  card_count: number | null;
+  category: CategoryLite | null;
+};
+
+/** Route for a book by its mold. */
+export function readerPath(b: { slug: string; page_type: PageType }): string {
+  return b.page_type === "howto_led"
+    ? `/cara/${b.slug}`
+    : `/ringkasan-buku/${b.slug}`;
+}
+
+const CARD_SELECT =
+  "slug, title, author, h1, page_type, cover_url, reading_minutes, card_count, categories(name, slug, emoji)";
+
+type RawCard = Omit<BookCard, "category"> & {
+  categories: CategoryLite | CategoryLite[] | null;
+};
+
+function normCard(b: RawCard): BookCard {
+  const c = Array.isArray(b.categories) ? b.categories[0] : b.categories;
+  return {
+    slug: b.slug,
+    title: b.title,
+    author: b.author,
+    h1: b.h1,
+    page_type: b.page_type,
+    cover_url: b.cover_url,
+    reading_minutes: b.reading_minutes,
+    card_count: b.card_count,
+    category: c ?? null,
+  };
+}
+
+/** All published books as lightweight cards (newest first). */
+export async function getAllPublishedBooks(): Promise<BookCard[]> {
+  try {
+    const { data } = await anon()
+      .from("books")
+      .select(CARD_SELECT)
+      .eq("is_published", true)
+      .order("published_at", { ascending: false });
+    return ((data ?? []) as unknown as RawCard[]).map(normCard);
+  } catch {
+    return [];
+  }
+}
+
+/** Category (by slug) + its published books. */
+export async function getCategoryWithBooks(
+  slug: string,
+): Promise<{ category: CategoryLite | null; books: BookCard[] }> {
+  const sb = anon();
+  const { data: cat } = await sb
+    .from("categories")
+    .select("id, name, slug, emoji")
+    .eq("slug", slug)
+    .maybeSingle();
+  if (!cat) return { category: null, books: [] };
+  const { data } = await sb
+    .from("books")
+    .select(CARD_SELECT)
+    .eq("is_published", true)
+    .eq("category_id", (cat as { id: string }).id)
+    .order("published_at", { ascending: false });
+  const { id: _id, ...category } = cat as CategoryLite & { id: string };
+  void _id;
+  return {
+    category,
+    books: ((data ?? []) as unknown as RawCard[]).map(normCard),
+  };
+}
+
+/** Slugs of categories that have ≥1 published book — for generateStaticParams. */
+export async function getActiveCategorySlugs(): Promise<string[]> {
+  const books = await getAllPublishedBooks();
+  return [
+    ...new Set(
+      books.map((b) => b.category?.slug).filter((s): s is string => !!s),
+    ),
+  ];
+}
+
+/** Other published pieces in the same category (for internal linking). */
+export async function getRelatedBooks(
+  categorySlug: string | null,
+  excludeSlug: string,
+  limit = 4,
+): Promise<BookCard[]> {
+  if (!categorySlug) return [];
+  const { books } = await getCategoryWithBooks(categorySlug);
+  return books.filter((b) => b.slug !== excludeSlug).slice(0, limit);
+}

@@ -4,7 +4,9 @@ import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { SwipeCards } from "@/components/reader/SwipeCards";
 import { SaveToWhatsApp } from "@/components/reader/SaveToWhatsApp";
 import { ShareCard } from "@/components/reader/ShareCard";
-import type { BookFull } from "@/lib/supabase/queries/books";
+import { BookCover } from "@/components/shared/BookCover";
+import { BookCardLink } from "@/components/shared/BookCardLink";
+import type { BookFull, BookCard } from "@/lib/supabase/queries/books";
 import {
   articleSchema,
   bookSchema,
@@ -12,7 +14,15 @@ import {
   faqSchema,
 } from "@/lib/seo/schema";
 
-export function ReaderView({ book, path }: { book: BookFull; path: string }) {
+export function ReaderView({
+  book,
+  path,
+  related = [],
+}: {
+  book: BookFull;
+  path: string;
+  related?: BookCard[];
+}) {
   const isBook = book.page_type === "book_led";
   const h1 = book.h1 ?? `Ringkasan Buku ${book.title}`;
   const introHeading =
@@ -175,23 +185,67 @@ export function ReaderView({ book, path }: { book: BookFull; path: string }) {
           <SaveToWhatsApp title={h1} path={path} />
         </section>
 
-        {/* Disclaimer + buy book */}
+        {/* Source book — cover thumbnail + buy link (fair use) + disclaimer */}
         <section className="mt-10 rounded-xl border border-line bg-paper-2/40 p-6 dark:border-line-dark dark:bg-indigo/60">
-          <p className="text-sm text-ink-muted dark:text-cream-muted">
+          <p className="font-mono text-xs uppercase tracking-[0.14em] text-ink-faint dark:text-cream-muted">
+            Disarikan dari buku
+          </p>
+          <div className="mt-4 flex gap-5">
+            <BookCover
+              coverUrl={book.cover_url}
+              title={book.title}
+              author={book.author}
+              className="w-24 shrink-0 sm:w-28"
+              sizes="120px"
+            />
+            <div className="min-w-0">
+              <h3 className="font-display text-xl font-semibold leading-tight">
+                {book.title}
+              </h3>
+              <p className="text-sm text-ink-muted dark:text-cream-muted">
+                {book.author}
+              </p>
+              {book.buy_url && (
+                <a
+                  href={book.buy_url}
+                  target="_blank"
+                  rel="noopener noreferrer sponsored"
+                  className="mt-4 inline-flex h-10 items-center rounded-lg border border-ink/25 px-4 text-sm font-semibold text-ink transition-colors hover:border-ink/50 dark:border-cream/25 dark:text-cream dark:hover:border-cream/50"
+                >
+                  Beli buku aslinya →
+                </a>
+              )}
+            </div>
+          </div>
+          <p className="mt-5 text-sm leading-relaxed text-ink-muted dark:text-cream-muted">
             {book.disclaimer ??
               "Ringkasan ini interpretasi & aplikasi dari ide buku — bukan pengganti bukunya. Ditinjau manusia, disuling dari materi publik penulis."}
           </p>
-          {book.buy_url && (
-            <a
-              href={book.buy_url}
-              target="_blank"
-              rel="noopener noreferrer sponsored"
-              className="mt-4 inline-flex h-11 items-center rounded-lg border border-ink/25 px-5 font-semibold text-ink transition-colors hover:border-ink/50 dark:border-cream/25 dark:text-cream dark:hover:border-cream/50"
-            >
-              Beli buku aslinya — dukung penulisnya →
-            </a>
-          )}
         </section>
+
+        {/* Baca juga — internal linking within category (SEO) */}
+        {related.length > 0 && (
+          <section className="mt-16">
+            <div className="flex items-baseline justify-between">
+              <h2 className="font-display text-2xl font-semibold sm:text-3xl">
+                Baca juga
+              </h2>
+              {book.category && (
+                <Link
+                  href={`/kategori/${book.category.slug}`}
+                  className="font-mono text-xs uppercase tracking-[0.12em] text-ink-faint hover:text-saffron dark:text-cream-muted"
+                >
+                  Semua {book.category.name} →
+                </Link>
+              )}
+            </div>
+            <div className="mt-6 grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-4">
+              {related.map((b) => (
+                <BookCardLink key={b.slug} book={b} />
+              ))}
+            </div>
+          </section>
+        )}
       </article>
 
       {/* Footer */}

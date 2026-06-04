@@ -1,17 +1,32 @@
-import { Button } from "@/components/ui/Button";
+import Link from "next/link";
 import { SariWordmark } from "@/components/brand/SariLogos";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { BookCover } from "@/components/shared/BookCover";
+import { BookCardLink } from "@/components/shared/BookCardLink";
+import {
+  getAllPublishedBooks,
+  readerPath,
+  type BookCard,
+  type CategoryLite,
+} from "@/lib/supabase/queries/books";
 
-const CATEGORIES = [
-  { n: "01", emoji: "💰", name: "Pengen Sukses" },
-  { n: "02", emoji: "🧠", name: "Biar Gak Stres" },
-  { n: "03", emoji: "🗣️", name: "Jago Ngomong" },
-  { n: "04", emoji: "💪", name: "Level Up Diri" },
-  { n: "05", emoji: "📈", name: "Duit & Investasi" },
-  { n: "06", emoji: "❤️", name: "Hubungan & Cinta" },
-];
+export const revalidate = 3600;
 
-export default function Home() {
+export default async function Home() {
+  const books = await getAllPublishedBooks();
+  const featured =
+    books.find((b) => b.slug === "atomic-habits") ?? books[0] ?? null;
+
+  // categories with counts, busiest first
+  const catMap = new Map<string, { cat: CategoryLite; count: number }>();
+  for (const b of books) {
+    if (!b.category) continue;
+    const e = catMap.get(b.category.slug) ?? { cat: b.category, count: 0 };
+    e.count += 1;
+    catMap.set(b.category.slug, e);
+  }
+  const categories = [...catMap.values()].sort((a, b) => b.count - a.count);
+
   return (
     <main className="grain relative">
       {/* Header */}
@@ -25,14 +40,14 @@ export default function Home() {
         <div className="h-px w-full bg-line dark:bg-line-dark" />
       </div>
 
-      {/* HERO — editorial, asymmetric */}
+      {/* HERO */}
       <section className="mx-auto grid max-w-6xl gap-10 px-5 pb-20 pt-12 sm:px-8 lg:grid-cols-12 lg:gap-12 lg:pt-20">
         <div className="lg:col-span-7">
           <p
             className="animate-fade-up font-mono text-xs uppercase tracking-[0.18em] text-ink-faint dark:text-cream-muted"
             style={{ animationDelay: "60ms" }}
           >
-            Ringkasan buku — No. 001
+            Ringkasan buku — {books.length} bacaan
           </p>
 
           <h1
@@ -56,18 +71,28 @@ export default function Home() {
             className="animate-fade-up mt-7 max-w-md text-lg text-ink-muted dark:text-cream-muted"
             style={{ animationDelay: "220ms" }}
           >
-            Serap ilmu dari buku bestseller lewat ringkasan, audio, & kartu.
-            Gratis, Bahasa Indonesia.
+            Serap ilmu dari buku bestseller lewat ringkasan & kartu. Plus cara
+            praktis yang bisa langsung dipakai. Gratis, Bahasa Indonesia.
           </p>
 
           <div
             className="animate-fade-up mt-8 flex flex-col gap-3 sm:flex-row sm:items-center"
             style={{ animationDelay: "300ms" }}
           >
-            <Button size="lg">Mulai baca</Button>
-            <Button variant="outline" size="lg">
-              Lihat contoh
-            </Button>
+            {featured && (
+              <Link
+                href={readerPath(featured)}
+                className="ease-spring inline-flex h-14 items-center justify-center rounded-lg bg-saffron px-8 font-semibold text-ink transition-transform hover:bg-saffron-deep active:scale-[0.97]"
+              >
+                Mulai baca
+              </Link>
+            )}
+            <Link
+              href="#perpustakaan"
+              className="ease-spring inline-flex h-14 items-center justify-center rounded-lg border border-ink/25 px-8 font-semibold text-ink transition-colors hover:border-ink/50 dark:border-cream/25 dark:text-cream dark:hover:border-cream/50"
+            >
+              Jelajah perpustakaan
+            </Link>
           </div>
 
           <p
@@ -78,16 +103,17 @@ export default function Home() {
           </p>
         </div>
 
-        {/* Offset editorial module — featured summary */}
-        <div
-          className="animate-rise lg:col-span-5 lg:pt-8"
-          style={{ animationDelay: "440ms" }}
-        >
-          <FeaturedBook />
-        </div>
+        {featured && (
+          <div
+            className="animate-rise lg:col-span-5 lg:pt-8"
+            style={{ animationDelay: "440ms" }}
+          >
+            <FeaturedBook book={featured} />
+          </div>
+        )}
       </section>
 
-      {/* INK BAND — signature value prop (saffron text works on ink) */}
+      {/* INK BAND */}
       <section className="bg-ink text-cream dark:bg-indigo">
         <div className="mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-24">
           <p className="font-mono text-xs uppercase tracking-[0.18em] text-saffron">
@@ -98,54 +124,73 @@ export default function Home() {
             <span className="text-saffron">sari</span>—inti yang bisa kamu serap
             sekali rebahan, tanpa kehilangan esensinya.
           </p>
-          <div className="mt-12 grid gap-px overflow-hidden rounded-xl border border-line-dark bg-line-dark sm:grid-cols-3">
-            {[
-              { k: "Teks", v: "Swipe-card ringkas, ala feed." },
-              { k: "Audio", v: "Dengerin sambil rebahan." },
-              { k: "Kartu", v: "Inti sari buat di-share." },
-            ].map((f) => (
-              <div key={f.k} className="bg-ink p-6 dark:bg-indigo">
-                <h3 className="font-display text-xl font-semibold">{f.k}</h3>
-                <p className="mt-1 text-sm text-cream-muted">{f.v}</p>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
-      {/* CATEGORY INDEX — editorial TOC */}
-      <section className="mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-24">
+      {/* PERPUSTAKAAN — cover grid */}
+      <section
+        id="perpustakaan"
+        className="mx-auto max-w-6xl scroll-mt-8 px-5 py-16 sm:px-8 sm:py-24"
+      >
         <div className="flex items-baseline justify-between">
           <h2 className="font-display text-2xl font-semibold sm:text-3xl">
-            Mau jago apa?
+            Perpustakaan
           </h2>
           <span className="font-mono text-xs uppercase tracking-[0.14em] text-ink-faint dark:text-cream-muted">
-            Jelajah
+            {books.length} bacaan
           </span>
         </div>
-        <ul className="mt-6">
-          {CATEGORIES.map((c) => (
-            <li key={c.n}>
-              <a
-                href="#"
-                className="group flex items-center gap-5 border-t border-line py-5 transition-colors hover:bg-ink/[0.02] dark:border-line-dark dark:hover:bg-cream/[0.03]"
-              >
-                <span className="font-mono text-sm text-ink-faint dark:text-cream-muted">
-                  {c.n}
-                </span>
-                <span className="text-2xl">{c.emoji}</span>
-                <span className="font-display text-xl font-medium sm:text-2xl">
-                  {c.name}
-                </span>
-                <span className="ml-auto font-mono text-lg text-ink-faint transition-transform duration-[var(--duration-base)] ease-spring group-hover:translate-x-1 dark:text-cream-muted">
-                  →
-                </span>
-              </a>
-            </li>
-          ))}
-          <li className="border-t border-line dark:border-line-dark" />
-        </ul>
+        {books.length > 0 ? (
+          <div className="mt-8 grid grid-cols-2 gap-x-5 gap-y-9 sm:grid-cols-3 lg:grid-cols-4">
+            {books.slice(0, 12).map((b, i) => (
+              <BookCardLink key={b.slug} book={b} priority={i < 4} />
+            ))}
+          </div>
+        ) : (
+          <p className="mt-8 text-ink-muted dark:text-cream-muted">
+            Bacaan segera hadir.
+          </p>
+        )}
       </section>
+
+      {/* CATEGORY INDEX — real links + counts */}
+      {categories.length > 0 && (
+        <section className="mx-auto max-w-6xl px-5 pb-20 sm:px-8">
+          <div className="flex items-baseline justify-between">
+            <h2 className="font-display text-2xl font-semibold sm:text-3xl">
+              Mau jago apa?
+            </h2>
+            <span className="font-mono text-xs uppercase tracking-[0.14em] text-ink-faint dark:text-cream-muted">
+              Jelajah
+            </span>
+          </div>
+          <ul className="mt-6">
+            {categories.map(({ cat, count }, i) => (
+              <li key={cat.slug}>
+                <Link
+                  href={`/kategori/${cat.slug}`}
+                  className="group flex items-center gap-5 border-t border-line py-5 transition-colors hover:bg-ink/[0.02] dark:border-line-dark dark:hover:bg-cream/[0.03]"
+                >
+                  <span className="font-mono text-sm text-ink-faint dark:text-cream-muted">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="text-2xl">{cat.emoji}</span>
+                  <span className="font-display text-xl font-medium sm:text-2xl">
+                    {cat.name}
+                  </span>
+                  <span className="ml-auto font-mono text-xs uppercase tracking-wider text-ink-faint dark:text-cream-muted">
+                    {count} bacaan
+                  </span>
+                  <span className="font-mono text-lg text-ink-faint transition-transform duration-[var(--duration-base)] ease-spring group-hover:translate-x-1 dark:text-cream-muted">
+                    →
+                  </span>
+                </Link>
+              </li>
+            ))}
+            <li className="border-t border-line dark:border-line-dark" />
+          </ul>
+        </section>
+      )}
 
       {/* Footer */}
       <footer className="mx-auto max-w-6xl px-5 pb-12 sm:px-8">
@@ -160,40 +205,50 @@ export default function Home() {
   );
 }
 
-/** Featured summary — editorial, flat, confident (no rotation/glass). */
-function FeaturedBook() {
+/** Featured summary — real book, cover-led, links to the reader. */
+function FeaturedBook({ book }: { book: BookCard }) {
   return (
-    <article className="rounded-xl border border-line bg-paper-2/50 p-6 dark:border-line-dark dark:bg-indigo">
+    <Link
+      href={readerPath(book)}
+      className="group block rounded-xl border border-line bg-paper-2/50 p-6 transition-colors hover:border-ink/20 dark:border-line-dark dark:bg-indigo dark:hover:border-cream/20"
+    >
       <div className="flex items-center justify-between">
-        <span className="rounded-full bg-saffron-soft px-3 py-1 text-sm font-semibold text-ink dark:bg-saffron/20 dark:text-saffron">
-          Pengen Sukses
-        </span>
+        {book.category && (
+          <span className="rounded-full bg-saffron-soft px-3 py-1 text-sm font-semibold text-ink dark:bg-saffron/20 dark:text-saffron">
+            {book.category.name}
+          </span>
+        )}
         <span className="font-mono text-xs uppercase tracking-wider text-ink-faint dark:text-cream-muted">
           Pilihan
         </span>
       </div>
 
       <div className="mt-5 flex gap-4">
-        <div className="flex h-28 w-20 shrink-0 items-center justify-center rounded-md bg-ink text-3xl text-cream dark:bg-indigo-deep">
-          💰
-        </div>
+        <BookCover
+          coverUrl={book.cover_url}
+          title={book.title}
+          author={book.author}
+          className="w-24 shrink-0"
+          sizes="110px"
+          priority
+        />
         <div className="min-w-0">
           <h3 className="font-display text-2xl font-semibold leading-tight">
-            Atomic Habits
+            {book.h1 ?? book.title}
           </h3>
           <p className="text-sm text-ink-muted dark:text-cream-muted">
-            James Clear
+            {book.author}
           </p>
           <p className="mt-3 font-mono text-xs uppercase tracking-wider text-ink-faint dark:text-cream-muted">
-            12 kartu · 15 menit
+            {book.card_count ?? "—"} kartu · {book.reading_minutes} menit
           </p>
         </div>
       </div>
 
-      <blockquote className="mt-5 border-l-2 border-saffron pl-4 font-display text-lg italic leading-snug">
-        &ldquo;Kamu nggak naik level ke target. Kamu turun ke level
-        kebiasaanmu.&rdquo;
-      </blockquote>
-    </article>
+      <span className="mt-5 inline-flex items-center gap-1.5 font-semibold text-ink transition-transform duration-[var(--duration-base)] ease-spring group-hover:gap-2.5 dark:text-cream">
+        Baca ringkasan
+        <span className="text-saffron">→</span>
+      </span>
+    </Link>
   );
 }
