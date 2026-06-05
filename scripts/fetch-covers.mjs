@@ -84,6 +84,17 @@ async function googleBooksCover(title, author) {
   return null;
 }
 
+// Clean honorifics that break author matching on Open Library.
+const cleanAuthor = (a) =>
+  (a || "").replace(/^(Dr|Prof|Mr|Ms|Mrs)\.?\s+/i, "").split("&")[0].trim();
+
+// Per-slug query overrides where the DB title (Indonesian / ambiguous) doesn't
+// match Open Library — use the canonical English title instead.
+const SLUG_OVERRIDE = {
+  "seni-bersikap-bodo-amat": { title: "The Subtle Art of Not Giving a Fuck", author: "Mark Manson", isbn: "9780062457714" },
+  "olahraga-teratur": { title: "Spark The Revolutionary New Science of Exercise and the Brain", author: "John Ratey", isbn: "9780316113517" },
+};
+
 async function main() {
   await ensureBucket();
   // Only fetch books still missing a cover (idempotent, lighter on the API).
@@ -98,11 +109,13 @@ async function main() {
   const results = [];
   for (const b of books) {
     let bytes = null, source = "none";
+    const ov = SLUG_OVERRIDE[b.slug];
+    const qTitle = ov?.title ?? b.title;
+    const qAuthor = ov?.author ?? cleanAuthor(b.author);
     try {
-      const meta = await openLibrarySearch(b.title, b.author);
-      bytes = await openLibraryCover(meta);
-      if (bytes) source = "openlibrary";
-      if (!bytes) { bytes = await googleBooksCover(b.title, b.author); if (bytes) source = "google"; }
+      if (ov?.isbn) { bytes = await openLibraryCover({ coverId: null, isbn: ov.isbn }); if (bytes) source = "openlibrary-isbn"; }
+      if (!bytes) { const meta = await openLibrarySearch(qTitle, qAuthor); bytes = await openLibraryCover(meta); if (bytes) source = "openlibrary"; }
+      if (!bytes) { bytes = await googleBooksCover(qTitle, qAuthor); if (bytes) source = "google"; }
     } catch (e) { console.warn(`  ! ${b.slug}: ${e.message}`); }
 
     if (!bytes) {

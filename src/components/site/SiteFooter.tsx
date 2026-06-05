@@ -28,12 +28,12 @@ export function SiteFooter() {
             <p className="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-ink-faint dark:text-cream-muted">
               Jelajah
             </p>
-            <ul className="mt-3 space-y-2.5">
+            <ul className="mt-2 space-y-0.5">
               {PRIMARY_NAV.map((l) => (
                 <li key={l.href}>
                   <Link
                     href={l.href}
-                    className="text-sm text-ink-muted transition-colors hover:text-saffron dark:text-cream-muted"
+                    className="-mx-2 block rounded-md px-2 py-2 text-sm text-ink-muted transition-colors hover:text-saffron dark:text-cream-muted"
                   >
                     {l.label}
                   </Link>
@@ -47,12 +47,12 @@ export function SiteFooter() {
             <p className="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-ink-faint dark:text-cream-muted">
               Kategori
             </p>
-            <ul className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2.5">
+            <ul className="mt-2 grid grid-cols-2 gap-x-3 gap-y-0.5">
               {NAV_CATEGORIES.map((c) => (
                 <li key={c.slug}>
                   <Link
                     href={`/kategori/${c.slug}`}
-                    className="text-sm text-ink-muted transition-colors hover:text-saffron dark:text-cream-muted"
+                    className="-mx-2 block rounded-md px-2 py-2 text-sm text-ink-muted transition-colors hover:text-saffron dark:text-cream-muted"
                   >
                     {c.name}
                   </Link>
